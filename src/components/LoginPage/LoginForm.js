@@ -1,28 +1,41 @@
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const LoginForm = () => {
   const [isActive, setIsActive] = useState(false);
-  const [value, setValue] = useState('');
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
 
-  function handleTextChange(text) {
-    setValue(text);
+    onSubmit: (values) => {
+      console.log('form data:', values);
+    },
+  });
 
-    if (text !== '') {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }
+  // function handleTextChange(text) {
+  //   setValue(text);
+
+  //   if (text !== '') {
+  //     setIsActive(true);
+  //   } else {
+  //     setIsActive(false);
+  //   }
+  // }
+  console.log('form values:', formik.values);
 
   return (
     <>
-      <FormContainer>
+      <FormContainer onSubmit={formik.handleSubmit}>
         <div id="float-label">
           <input
             type="email"
-            value={value}
-            onChange={(e) => handleTextChange(e.target.value)}
+            id="email"
+            name="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
           />
           <label className={isActive ? 'Active' : ''} htmlFor="email">
             E-mail
@@ -31,14 +44,16 @@ const LoginForm = () => {
         <div id="float-label">
           <input
             type="password"
-            value={value}
-            onChange={(e) => handleTextChange(e.target.value)}
+            id="password"
+            name="password"
+            onChange={formik.handleChange}
+            value={formik.values.password}
           />
           <label className={isActive ? 'Active' : ''} htmlFor="password">
             Password
           </label>
         </div>{' '}
-        <PrimaryButton> Login </PrimaryButton>
+        <PrimaryButton type="submit"> Login </PrimaryButton>
       </FormContainer>
     </>
   );
