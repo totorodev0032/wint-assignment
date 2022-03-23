@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const LoginForm = () => {
-  const [isActive, setIsActive] = useState('');
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -13,18 +12,27 @@ const LoginForm = () => {
     onSubmit: (values) => {
       console.log('form data:', values);
     },
+
+    validate: (values) => {
+      let errors = {};
+
+      if (!values.email) {
+        errors.email = 'This is Required';
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = 'Invalid email format';
+      }
+
+      if (!values.password) {
+        errors.password = 'This is Required';
+      }
+
+      return errors;
+    },
   });
 
-  // function handleTextChange(evt) {
-  //   const [name, value] = evt.target;
-
-  //   if (value !== '' && name == 'email') {
-  //     setIsActive(true);
-  //   } else {
-  //     setIsActive(false);
-  //   }
-  // }
-  // console.log(isActive);
+  console.log(formik.touched);
   return (
     <>
       <FormContainer onSubmit={formik.handleSubmit}>
@@ -35,11 +43,13 @@ const LoginForm = () => {
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
+            onBlur={formik.handleBlur}
             // onClick={(e) => handleTextChange(e)}
           />
-          <label className={isActive ? 'Active' : ''} htmlFor="email">
-            E-mail
-          </label>
+          <label htmlFor="email">E-mail</label>
+          {formik.touched.email && formik.errors.email ? (
+            <div> {formik.errors.email} </div>
+          ) : null}
         </div>
         <div id="float-label">
           <input
@@ -48,13 +58,12 @@ const LoginForm = () => {
             name="password"
             onChange={formik.handleChange}
             value={formik.values.password}
+            onBlur={formik.handleBlur}
           />
-          <label
-            // className={isActive.isPasswordActive ? 'Active' : ''}
-            htmlFor="password"
-          >
-            Password
-          </label>
+          <label htmlFor="password">Password</label>
+          {formik.touched.password && formik.errors.password ? (
+            <div> {formik.errors.password} </div>
+          ) : null}
         </div>{' '}
         <PrimaryButton type="submit"> Login </PrimaryButton>
       </FormContainer>
@@ -99,21 +108,26 @@ const FormContainer = styled.form`
     color: #999;
     pointer-events: none;
     position: absolute;
-    transform: translate(0, 26px) scale(1);
+    ${'' /* transform: translate(0, 26px) scale(1); */}
     transform-origin: top left;
-    transition: all 0.2s ease-out;
+    ${'' /* transition: all 0.2s ease-out; */}
     padding-left: 25px;
-  }
-
-  #float-label:focus-within label {
     transform: translate(0, 12px) scale(0.75);
   }
 
-  #float-label .Active {
+  ${
+    '' /* #float-label:focus-within label {
     transform: translate(0, 12px) scale(0.75);
+  } */
   }
 
-  @media (max-width: 496px) {
+  ${
+    '' /* #float-label .Active {
+    transform: translate(0, 12px) scale(0.75);
+  } */
+  }
+
+  @media (max-width: 596px) {
     width: 90%;
   }
 `;
