@@ -8,7 +8,7 @@ const LoginPage = () => {
     <>
       <LoginPageWrapper>
         <LoginPageContainer>
-          <Heading>Welcome Back!</Heading>
+          <Heading>Welcome Back.</Heading>
           <LoginForm />
         </LoginPageContainer>{' '}
       </LoginPageWrapper>

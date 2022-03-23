@@ -1,8 +1,11 @@
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 
 const LoginForm = () => {
+  let navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -11,6 +14,7 @@ const LoginForm = () => {
 
     onSubmit: (values) => {
       console.log('form data:', values);
+      navigate('/dashboard');
     },
 
     validate: (values) => {
