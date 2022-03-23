@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const LoginForm = () => {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState('');
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -15,17 +15,16 @@ const LoginForm = () => {
     },
   });
 
-  // function handleTextChange(text) {
-  //   setValue(text);
+  // function handleTextChange(evt) {
+  //   const [name, value] = evt.target;
 
-  //   if (text !== '') {
+  //   if (value !== '' && name == 'email') {
   //     setIsActive(true);
   //   } else {
   //     setIsActive(false);
   //   }
   // }
-  console.log('form values:', formik.values);
-
+  // console.log(isActive);
   return (
     <>
       <FormContainer onSubmit={formik.handleSubmit}>
@@ -36,6 +35,7 @@ const LoginForm = () => {
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
+            // onClick={(e) => handleTextChange(e)}
           />
           <label className={isActive ? 'Active' : ''} htmlFor="email">
             E-mail
@@ -49,7 +49,10 @@ const LoginForm = () => {
             onChange={formik.handleChange}
             value={formik.values.password}
           />
-          <label className={isActive ? 'Active' : ''} htmlFor="password">
+          <label
+            // className={isActive.isPasswordActive ? 'Active' : ''}
+            htmlFor="password"
+          >
             Password
           </label>
         </div>{' '}
@@ -62,7 +65,7 @@ const LoginForm = () => {
 export default LoginForm;
 
 const FormContainer = styled.form`
-  width: 400px;
+  width: 300px;
   height: auto;
   justify-content: center;
   align-items: center;
@@ -76,7 +79,7 @@ const FormContainer = styled.form`
 
   #float-label input {
     width: 90%;
-    height: 60px;
+    height: 50px;
     background: #323645;
     border: none;
     border-radius: 15px;
@@ -108,6 +111,10 @@ const FormContainer = styled.form`
 
   #float-label .Active {
     transform: translate(0, 12px) scale(0.75);
+  }
+
+  @media (max-width: 496px) {
+    width: 90%;
   }
 `;
 
