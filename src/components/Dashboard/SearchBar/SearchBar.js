@@ -3,17 +3,19 @@ import styled from 'styled-components';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { useClickOutside } from 'react-click-outside-hook';
+import { words } from '../data/words';
 
 const SearchBarWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   width: 34em;
-  height: 3.8em;
+  height: 4em;
   background-color: #2f2f35;
   border: 1px solid #68686d;
   border-radius: 10px;
   box-shadow: 0px 2px 12px 3px rgba(0, 0, 0, 0.14);
   overflow: hidden;
+  ${'' /* align-items: center; */}
 `;
 
 const SearchInputContainer = styled.div`
@@ -22,7 +24,7 @@ const SearchInputContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  padding: 2px 15px;
+  padding: 0 15px;
 `;
 
 const SearchInput = styled.input`
@@ -69,9 +71,18 @@ const CloseIcon = styled.span`
   }
 `;
 
+const SearchContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  overflow-y: auto;
+`;
+
 const containerVariants = {
   expanded: {
-    height: '20em',
+    height: '24em',
   },
 
   collapsed: {
@@ -84,6 +95,8 @@ const containerTransition = { type: 'spring', damping: 22, stiffness: 150 };
 const SearchBar = () => {
   const [isExpanded, setExpanded] = useState(false);
   const [ref, isClickedOutside] = useClickOutside();
+  const [inputValue, setInputValue] = useState();
+  const [query, setQuery] = useState('');
 
   const expandContainer = () => {
     setExpanded(true);
@@ -97,6 +110,22 @@ const SearchBar = () => {
     if (isClickedOutside) collapseContainer();
   }, [isClickedOutside]);
 
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    console.log(inputValue);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setQuery(inputValue);
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
+      (res) => console.log(res.json())
+    );
+    console.log('success', inputValue);
+  };
+
+  const filterWords = words.filter((word) => word.startsWith(inputValue));
+  //   console.log(filterWords);
   return (
     <>
       <SearchBarWrapper
@@ -109,11 +138,23 @@ const SearchBar = () => {
           <SearchIcon>
             <IoSearch />
           </SearchIcon>
-          <SearchInput
-            onFocus={expandContainer}
-            placeholder="Search for word"
-          />
+          <form onSubmit={handleSubmit}>
+            <SearchInput
+              onFocus={expandContainer}
+              placeholder="Search for word"
+              onChange={handleChange}
+            />
+            <button type="submit" style={{ display: 'none' }}></button>
+          </form>
         </SearchInputContainer>
+        <SearchContent>
+          {' '}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {filterWords === undefined
+              ? null
+              : filterWords.slice(0, 5).map((w) => <p> {w} </p>)}
+          </div>
+        </SearchContent>
       </SearchBarWrapper>
     </>
   );
