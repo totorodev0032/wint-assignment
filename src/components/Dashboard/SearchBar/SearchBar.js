@@ -81,6 +81,18 @@ const SearchContent = styled.div`
   overflow-y: auto;
 `;
 
+const DictionMeaningContainer = styled.div`
+  display: flex;
+  height: 10em;
+  width: 34em;
+  background-color: #2f2f35;
+  border: 1px solid #68686d;
+  border-radius: 10px;
+  margin-top: 2em;
+  justify-content: center;
+  align-items: center;
+`;
+
 const containerVariants = {
   expanded: {
     height: '24em',
@@ -98,6 +110,7 @@ const SearchBar = () => {
   const [ref, isClickedOutside] = useClickOutside();
   const [inputValue, setInputValue] = useState(0);
   const [data, setData] = useState('');
+  const [error, setError] = useState('');
   const inputRef = useRef();
 
   const expandContainer = () => {
@@ -123,6 +136,10 @@ const SearchBar = () => {
       .then((response) => {
         setData(response.data[0]);
         console.log(response.data[0]);
+      })
+      .catch((error) => {
+        setError(error.response.data.message);
+        console.log(error.response.data.message);
       });
   }
 
@@ -173,10 +190,16 @@ const SearchBar = () => {
       <div>
         {' '}
         {data ? (
-          <p style={{ color: 'white' }}>
-            {data.meanings[0].definitions[0].definition}
-          </p>
-        ) : null}{' '}
+          <DictionMeaningContainer>
+            <p style={{ color: 'white' }}>
+              {data.meanings[0].definitions[0].definition}
+            </p>
+          </DictionMeaningContainer>
+        ) : error ? (
+          <DictionMeaningContainer>
+            <p style={{ color: 'white' }}>{error}</p>
+          </DictionMeaningContainer>
+        ) : null}
       </div>
     </>
   );
