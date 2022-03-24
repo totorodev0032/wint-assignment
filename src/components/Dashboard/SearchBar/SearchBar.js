@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import { motion } from 'framer-motion';
@@ -87,7 +87,7 @@ const containerVariants = {
   },
 
   collapsed: {
-    height: '3.4em',
+    height: '4em',
   },
 };
 
@@ -98,6 +98,7 @@ const SearchBar = () => {
   const [ref, isClickedOutside] = useClickOutside();
   const [inputValue, setInputValue] = useState(0);
   const [data, setData] = useState('');
+  const inputRef = useRef();
 
   const expandContainer = () => {
     setExpanded(true);
@@ -127,12 +128,9 @@ const SearchBar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setQuery(inputValue);
-    // fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
-    //   (res) => console.log(res.data[0])
-    // );
     getMeaning();
     collapseContainer();
+    inputRef.current.blur();
     console.log('success', inputValue);
   };
 
@@ -155,6 +153,7 @@ const SearchBar = () => {
               onFocus={expandContainer}
               placeholder="Search for word"
               onChange={handleChange}
+              ref={inputRef}
             />
             <button type="submit" style={{ display: 'none' }}></button>
           </form>
@@ -163,7 +162,9 @@ const SearchBar = () => {
           {' '}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {filterWords !== undefined
-              ? filterWords.slice(0, 5).map((w) => <p> {w} </p>)
+              ? filterWords
+                  .slice(0, 5)
+                  .map((w) => <p style={{ color: 'white' }}> {w} </p>)
               : ''}
           </div>
         </SearchContent>
