@@ -4,6 +4,7 @@ import { IoClose, IoSearch } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { useClickOutside } from 'react-click-outside-hook';
 import { words } from '../data/words';
+import axios from 'axios';
 
 const SearchBarWrapper = styled(motion.div)`
   display: flex;
@@ -95,8 +96,8 @@ const containerTransition = { type: 'spring', damping: 22, stiffness: 150 };
 const SearchBar = () => {
   const [isExpanded, setExpanded] = useState(false);
   const [ref, isClickedOutside] = useClickOutside();
-  const [inputValue, setInputValue] = useState();
-  const [query, setQuery] = useState('');
+  const [inputValue, setInputValue] = useState(0);
+  const [data, setData] = useState('');
 
   const expandContainer = () => {
     setExpanded(true);
@@ -115,17 +116,28 @@ const SearchBar = () => {
     console.log(inputValue);
   };
 
+  function getMeaning() {
+    axios
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputValue}`)
+      .then((response) => {
+        setData(response.data[0]);
+        console.log(response.data[0]);
+      });
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setQuery(inputValue);
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
-      (res) => console.log(res.json())
-    );
+    // setQuery(inputValue);
+    // fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
+    //   (res) => console.log(res.data[0])
+    // );
+    getMeaning();
+    collapseContainer();
     console.log('success', inputValue);
   };
 
   const filterWords = words.filter((word) => word.startsWith(inputValue));
-  //   console.log(filterWords);
+  console.log(filterWords);
   return (
     <>
       <SearchBarWrapper
@@ -150,12 +162,21 @@ const SearchBar = () => {
         <SearchContent>
           {' '}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {filterWords === undefined
-              ? null
-              : filterWords.slice(0, 5).map((w) => <p> {w} </p>)}
+            {filterWords !== undefined
+              ? filterWords.slice(0, 5).map((w) => <p> {w} </p>)
+              : ''}
           </div>
         </SearchContent>
       </SearchBarWrapper>
+
+      <div>
+        {' '}
+        {data ? (
+          <p style={{ color: 'white' }}>
+            {data.meanings[0].definitions[0].definition}
+          </p>
+        ) : null}{' '}
+      </div>
     </>
   );
 };
