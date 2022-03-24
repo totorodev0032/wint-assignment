@@ -16,6 +16,10 @@ const SearchBarWrapper = styled(motion.div)`
   border-radius: 10px;
   box-shadow: 0px 2px 12px 3px rgba(0, 0, 0, 0.14);
   overflow: hidden;
+
+  @media (max-width: 496px) {
+    width: 20rem;
+  }
   ${'' /* align-items: center; */}
 `;
 
@@ -79,6 +83,10 @@ const SearchContent = styled.div`
   flex-direction: column;
   padding: 1em;
   overflow-y: auto;
+
+  p {
+    cursor: pointer;
+  }
 `;
 
 const DictionMeaningContainer = styled.div`
@@ -91,6 +99,10 @@ const DictionMeaningContainer = styled.div`
   margin-top: 2em;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 496px) {
+    width: 20rem;
+  }
 `;
 
 const containerVariants = {
@@ -130,9 +142,9 @@ const SearchBar = () => {
     console.log(inputValue);
   };
 
-  function getMeaning() {
+  function getMeaning(word) {
     axios
-      .get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputValue}`)
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${word}`)
       .then((response) => {
         setData(response.data[0]);
         console.log(response.data[0]);
@@ -144,12 +156,25 @@ const SearchBar = () => {
   }
 
   const handleSubmit = (e) => {
+    setData('');
+    setError('');
     e.preventDefault();
-    getMeaning();
+    getMeaning(inputValue);
     collapseContainer();
     inputRef.current.blur();
     console.log('success', inputValue);
   };
+
+  function handleSuggestion(word) {
+    setData('');
+    setError('');
+    console.log('word', word);
+    setInputValue(word);
+    getMeaning(word);
+    collapseContainer();
+    inputRef.current.blur();
+    console.log(error);
+  }
 
   const filterWords = words.filter((word) => word.startsWith(inputValue));
   console.log(filterWords);
@@ -170,6 +195,7 @@ const SearchBar = () => {
               onFocus={expandContainer}
               placeholder="Search for word"
               onChange={handleChange}
+              value={inputValue}
               ref={inputRef}
             />
             <button type="submit" style={{ display: 'none' }}></button>
@@ -179,9 +205,16 @@ const SearchBar = () => {
           {' '}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {filterWords !== undefined
-              ? filterWords
-                  .slice(0, 5)
-                  .map((w) => <p style={{ color: 'white' }}> {w} </p>)
+              ? filterWords.slice(0, 5).map((w, index) => (
+                  <p
+                    key={index}
+                    onClick={() => handleSuggestion(w)}
+                    style={{ color: 'white' }}
+                  >
+                    {' '}
+                    {w}{' '}
+                  </p>
+                ))
               : ''}
           </div>
         </SearchContent>
@@ -201,6 +234,8 @@ const SearchBar = () => {
           </DictionMeaningContainer>
         ) : null}
       </div>
+
+      {/* <p> {error} </p> */}
     </>
   );
 };
