@@ -171,10 +171,13 @@ const SearchBar = () => {
     setData('');
     setError('');
     e.preventDefault();
-    getMeaning(inputValue);
-    collapseContainer();
-    inputRef.current.blur();
-    console.log('success', inputValue);
+
+    if (e.target.value !== '') {
+      getMeaning(inputValue);
+      collapseContainer();
+      inputRef.current.blur();
+      console.log('success', inputValue);
+    }
   };
 
   function handleSuggestion(word) {

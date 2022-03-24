@@ -47,7 +47,6 @@ const LoginForm = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
             onBlur={formik.handleBlur}
-            // onClick={(e) => handleTextChange(e)}
           />
           <label htmlFor="email">E-mail</label>
           {formik.touched.email && formik.errors.email ? (
