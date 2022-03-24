@@ -99,6 +99,11 @@ const DictionMeaningContainer = styled.div`
   margin-top: 2em;
   justify-content: center;
   align-items: center;
+  transition-delay: 2s;
+
+  p {
+    padding: 0 10px 0 10px;
+  }
 
   @media (max-width: 496px) {
     width: 20rem;
@@ -144,7 +149,7 @@ const SearchBar = () => {
 
   function getMeaning(word) {
     axios
-      .get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${word}`)
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
       .then((response) => {
         setData(response.data[0]);
         console.log(response.data[0]);
@@ -195,7 +200,7 @@ const SearchBar = () => {
               onFocus={expandContainer}
               placeholder="Search for word"
               onChange={handleChange}
-              value={inputValue}
+              value={inputValue === 0 ? null : inputValue}
               ref={inputRef}
             />
             <button type="submit" style={{ display: 'none' }}></button>

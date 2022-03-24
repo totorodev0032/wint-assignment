@@ -14,6 +14,7 @@ const LoginForm = () => {
 
     onSubmit: (values) => {
       console.log('form data:', values);
+      localStorage.setItem('UserDetails', JSON.stringify(values));
       navigate('/dashboard');
     },
 
