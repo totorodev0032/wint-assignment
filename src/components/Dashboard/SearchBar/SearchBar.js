@@ -91,7 +91,8 @@ const SearchContent = styled.div`
 
 const DictionMeaningContainer = styled.div`
   display: flex;
-  height: 10em;
+  flex-direction: column;
+  height: auto;
   width: 34em;
   background-color: #2f2f35;
   border: 1px solid #68686d;
@@ -101,8 +102,14 @@ const DictionMeaningContainer = styled.div`
   align-items: center;
   transition-delay: 2s;
 
+  .emoji {
+    font-size: 3rem;
+    margin-bottom: 5px;
+  }
+
   p {
     padding: 0 10px 0 10px;
+    text-align: center;
   }
 
   @media (max-width: 496px) {
@@ -229,18 +236,18 @@ const SearchBar = () => {
         {' '}
         {data ? (
           <DictionMeaningContainer>
+            <p className="emoji">🌟</p>
             <p style={{ color: 'white' }}>
               {data.meanings[0].definitions[0].definition}
             </p>
           </DictionMeaningContainer>
         ) : error ? (
           <DictionMeaningContainer>
+            <p className="emoji">😭</p>
             <p style={{ color: 'white' }}>{error}</p>
           </DictionMeaningContainer>
         ) : null}
       </div>
-
-      {/* <p> {error} </p> */}
     </>
   );
 };
