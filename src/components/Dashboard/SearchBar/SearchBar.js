@@ -161,7 +161,7 @@ const SearchBar = () => {
   }, [isClickedOutside]);
 
   const handleChange = (e) => {
-    setInputValue(e.target.value);
+    setInputValue(e.target.value.toLowerCase());
     console.log(inputValue);
   };
 
