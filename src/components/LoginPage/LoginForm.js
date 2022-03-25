@@ -135,6 +135,7 @@ const FormContainer = styled.form`
     transform-origin: top left;
     padding-left: 25px;
     transform: translate(0, 12px) scale(0.75);
+    margin-left: 10px;
   }
 
   .errorBox {

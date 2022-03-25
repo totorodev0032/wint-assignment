@@ -31,6 +31,8 @@ const SearchInputContainer = styled.div`
   padding: 0 15px;
   .instruction {
     color: #cecece;
+    padding-right: 10px;
+    font-size: 0.9rem;
   }
 `;
 
