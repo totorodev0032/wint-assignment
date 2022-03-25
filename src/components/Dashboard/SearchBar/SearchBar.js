@@ -20,7 +20,6 @@ const SearchBarWrapper = styled(motion.div)`
   @media (max-width: 496px) {
     width: 20rem;
   }
-  ${'' /* align-items: center; */}
 `;
 
 const SearchInputContainer = styled.div`
@@ -30,6 +29,9 @@ const SearchInputContainer = styled.div`
   align-items: center;
   position: relative;
   padding: 0 15px;
+  .instruction {
+    color: #cecece;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -87,6 +89,15 @@ const SearchContent = styled.div`
   p {
     cursor: pointer;
   }
+`;
+
+const SuggestionElement = styled.div`
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  cursor: pointer;
+  height: 10px;
+  margin-bottom: 40px;
 `;
 
 const DictionMeaningContainer = styled.div`
@@ -215,28 +226,30 @@ const SearchBar = () => {
             />
             <button type="submit" style={{ display: 'none' }}></button>
           </form>
+          {inputValue !== 0 && inputValue !== '' ? (
+            <p className="instruction">Press enter to search</p>
+          ) : null}
         </SearchInputContainer>
+
+        {/* SUGGESTION FROM THE DATA */}
         <SearchContent>
-          {' '}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {filterWords !== undefined
               ? filterWords.slice(0, 5).map((w, index) => (
-                  <p
-                    key={index}
-                    onClick={() => handleSuggestion(w)}
-                    style={{ color: 'white' }}
-                  >
-                    {' '}
-                    {w}{' '}
-                  </p>
+                  <SuggestionElement onClick={() => handleSuggestion(w)}>
+                    <p key={index} style={{ color: 'white' }}>
+                      {w}
+                    </p>
+                    <p style={{ color: '#cecece' }}>Click to Search</p>
+                  </SuggestionElement>
                 ))
               : ''}
           </div>
         </SearchContent>
       </SearchBarWrapper>
 
+      {/* MESSAGE/INFORMATION */}
       <div>
-        {' '}
         {data ? (
           <DictionMeaningContainer>
             <p className="emoji">🌟</p>
