@@ -48,4 +48,5 @@ const LoginPageContainer = styled.div`
 const Heading = styled.h3`
   font-size: 3rem;
   color: #ffffff;
+  margin-bottom: 20px;
 `;

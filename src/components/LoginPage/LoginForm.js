@@ -2,6 +2,8 @@ import { useFormik } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
+import { MdEmail } from 'react-icons/md';
+import { RiLockPasswordFill } from 'react-icons/ri';
 
 const LoginForm = () => {
   let navigate = useNavigate();
@@ -38,41 +40,54 @@ const LoginForm = () => {
 
   return (
     <>
-      <FormContainer onSubmit={formik.handleSubmit}>
-        <div id="float-label">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            onBlur={formik.handleBlur}
+      <FormContainer autoComplete="off" onSubmit={formik.handleSubmit}>
+        {/* email */}
+        <InputContainer>
+          <div id="float-label">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              onBlur={formik.handleBlur}
+            />
+            <label htmlFor="email">E-mail</label>
+          </div>
+          <MdEmail
+            style={{ color: '#cecece', fontSize: '30px', marginRight: '15px' }}
           />
-          <label htmlFor="email">E-mail</label>
-          {formik.touched.email && formik.errors.email ? (
-            <div>
-              {' '}
-              <p>{formik.errors.email}</p>{' '}
-            </div>
-          ) : null}
-        </div>
-        <div id="float-label">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            onBlur={formik.handleBlur}
+        </InputContainer>
+        {formik.touched.email && formik.errors.email ? (
+          <div className="errorBox">
+            {' '}
+            <p>{formik.errors.email}</p>{' '}
+          </div>
+        ) : null}
+
+        {/* password */}
+        <InputContainer>
+          <div id="float-label">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              onBlur={formik.handleBlur}
+            />
+            <label htmlFor="password">Password</label>
+          </div>
+          <RiLockPasswordFill
+            style={{ color: '#cecece', fontSize: '30px', marginRight: '15px' }}
           />
-          <label htmlFor="password">Password</label>
-          {formik.touched.password && formik.errors.password ? (
-            <div>
-              {' '}
-              <p> {formik.errors.password}</p>{' '}
-            </div>
-          ) : null}
-        </div>{' '}
+        </InputContainer>
+        {formik.touched.password && formik.errors.password ? (
+          <div className="errorBox">
+            {' '}
+            <p> {formik.errors.password}</p>{' '}
+          </div>
+        ) : null}
         <PrimaryButton type="submit"> Login </PrimaryButton>
       </FormContainer>
     </>
@@ -82,7 +97,7 @@ const LoginForm = () => {
 export default LoginForm;
 
 const FormContainer = styled.form`
-  width: 350px;
+  width: 400px;
   height: auto;
   justify-content: center;
   align-items: center;
@@ -90,39 +105,23 @@ const FormContainer = styled.form`
   #float-label {
     display: flex;
     flex-direction: column;
-    min-width: 350px;
+    ${'' /* min-width: 350px; */}
     position: relative;
-
-    div {
-      display: flex;
-      width: 100%;
-      background: #ffcdd2;
-      border: 1px solid #e57373;
-      height: 40px;
-      color: #000000;
-      border-radius: 10px;
-      margin: 0px 0 20px 0;
-      align-items: center;
-
-      p {
-        color: #ef5350;
-        padding-left: 10px;
-      }
-    }
   }
 
   #float-label input {
-    width: 90%;
-    height: 50px;
+    width: 100%;
+    height: 45px;
     background: #323645;
     border: none;
-    border-radius: 15px;
+    ${'' /* border-radius: 15px; */}
     padding: 10px 10px 0 20px;
     color: #ffffff;
-    margin-bottom: 10px;
+    margin-left: 10px;
 
     &:focus {
       outline: none;
+      background: #323645;
     }
   }
 
@@ -138,9 +137,41 @@ const FormContainer = styled.form`
     transform: translate(0, 12px) scale(0.75);
   }
 
+  .errorBox {
+    display: flex;
+    width: 100%;
+    background: #ffcdd2;
+    border: 1px solid #e57373;
+    height: 40px;
+    color: #000000;
+    border-radius: 10px;
+    margin: 10px 0 20px 0;
+    align-items: center;
+
+    p {
+      color: #ef5350;
+      padding-left: 10px;
+    }
+  }
+
   @media (max-width: 596px) {
     width: 90%;
+
+    #float-label input {
+      width: 50%;
+    }
   }
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 55px;
+  background: #323645;
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 20px;
+  justify-content: space-between;
 `;
 
 const PrimaryButton = styled.button`
@@ -155,6 +186,6 @@ const PrimaryButton = styled.button`
   font-size: 0.8rem;
   font-weight: 600;
   color: #ffffff;
-  margin-top: 10px;
   cursor: pointer;
+  margin-top: 20px;
 `;
