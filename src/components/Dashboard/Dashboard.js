@@ -7,7 +7,7 @@ const Dashboard = () => {
     <>
       <DashboardWrapper>
         {' '}
-        <SearchBar />{' '}
+        <SearchBar />
       </DashboardWrapper>
     </>
   );

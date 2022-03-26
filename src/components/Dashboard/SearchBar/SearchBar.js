@@ -4,6 +4,7 @@ import { IoClose, IoSearch } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { useClickOutside } from 'react-click-outside-hook';
 import { words } from '../data/words';
+import MoonLoader from 'react-spinners/MoonLoader';
 import axios from 'axios';
 
 const SearchBarWrapper = styled(motion.div)`
@@ -105,6 +106,7 @@ const SuggestionElement = styled.div`
 const DictionMeaningContainer = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 10em;
   height: auto;
   width: 34em;
   background-color: #2f2f35;
@@ -149,6 +151,7 @@ const SearchBar = () => {
   const [data, setData] = useState('');
   const [error, setError] = useState('');
   const inputRef = useRef();
+  const [isLoading, setLoading] = useState(false);
 
   const expandContainer = () => {
     setExpanded(true);
@@ -183,6 +186,7 @@ const SearchBar = () => {
   const handleSubmit = (e) => {
     setData('');
     setError('');
+    setLoading(true);
     e.preventDefault();
 
     if (e.target.value !== '') {
@@ -191,17 +195,24 @@ const SearchBar = () => {
       inputRef.current.blur();
       console.log('success', inputValue);
     }
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   };
 
   function handleSuggestion(word) {
     setData('');
     setError('');
-    console.log('word', word);
+    setLoading(true);
     setInputValue(word);
     getMeaning(word);
     collapseContainer();
     inputRef.current.blur();
-    console.log(error);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }
 
   const filterWords = words.filter((word) => word.startsWith(inputValue));
@@ -252,14 +263,20 @@ const SearchBar = () => {
 
       {/* MESSAGE/INFORMATION */}
       <div>
-        {data ? (
+        {isLoading && (
+          <DictionMeaningContainer>
+            {' '}
+            <MoonLoader loading color="#000" size={20} />{' '}
+          </DictionMeaningContainer>
+        )}
+        {data && isLoading === false ? (
           <DictionMeaningContainer>
             <p className="emoji">🌟</p>
             <p style={{ color: 'white' }}>
               {data.meanings[0].definitions[0].definition}
             </p>
           </DictionMeaningContainer>
-        ) : error ? (
+        ) : error && isLoading === false ? (
           <DictionMeaningContainer>
             <p className="emoji">😭</p>
             <p style={{ color: 'white' }}>{error}</p>
